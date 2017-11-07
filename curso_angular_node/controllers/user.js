@@ -6,7 +6,7 @@ var jwt = require('../services/jwt');
 
 function pruebas(request,response){
   response.status(200).send({
-    message: 'entrando a la funcion de pruebas'
+    message: 'Logueado correctamente'
   });
 }
 
