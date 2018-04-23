@@ -1,5 +1,7 @@
 #Ignore node js
 
+.idea/
+
 node_modules/
 
 # MAC OS X
