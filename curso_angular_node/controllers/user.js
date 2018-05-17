@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var bcrypt = require('bcrypt-nodejs');
 var User = require('../models/user');
@@ -6,7 +6,7 @@ var jwt = require('../services/jwt');
 
 function pruebas(request,response){
   response.status(200).send({
-    message: 'Logueado correctamente'
+    message: 'Logueado correctamente '+response
   });
 }
 
@@ -84,8 +84,45 @@ function loginUser(request,response){
     });
 }
 
+function updateImagen(request,response){
+  
+}
+
+function uploadImagen(request,response){
+  var id = request.params.id;
+  var file = 'Imagen no subida ...';
+
+  if(request.files){
+      var filePath = request.files.image.path;
+      var fileSplit = filePath.split('uploads/users/images/');
+      var fileName = fileSplit[1];
+      var extSplit = fileName.split('\.');
+      var imageName = extSplit[0];
+      var fileExt = extSplit[1];
+
+      if(fileExt == 'png' || fileExt == 'jpg' || fileExt == 'gif'){
+          User.findByIdAndUpdate(id,{image: fileName},(error,userUpdated) => {
+              // Error de capa 8
+              if(!userUpdated){
+                  response.status(404).send({message: 'No se ha podido actualizar el usuario'});
+              }else{
+                  response.status(200).send({user:userUpdated});
+              }
+          });
+      }else{
+        response.status(200).send({message:'Extensión del archivo no válida'});
+      }
+
+      console.log(imageName);
+  }else{
+    response.status(200).send({message:'La imagen no se ha subido'});
+  }
+
+}
+
 module.exports = {
   pruebas,
   saveUser,
-  loginUser
+  loginUser,
+  uploadImagen
 };
